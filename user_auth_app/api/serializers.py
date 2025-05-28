@@ -2,12 +2,20 @@ from rest_framework import serializers
 from user_auth_app.models import UserProfile
 from django.contrib.auth.models import User
 
+"""
+Serializer for the UserProfile model.
+Handles serialization and deserialization of user profile data, including user, bio, and location.
+"""
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['user', 'bio', 'location']
 
 
+"""
+Serializer for user registration.
+Validates that passwords match and that the email is unique before creating a new User instance.
+"""
 class RegistrationSerializer(serializers.ModelSerializer):
 
     repeated_password = serializers.CharField(write_only=True)
@@ -21,6 +29,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
             }
         }
 
+    """
+    Custom save method to create a new User instance after validating passwords and email uniqueness.
+    """
     def save(self):
         pw = self.validated_data['password']
         repeated_pw = self.validated_data['repeated_password']
